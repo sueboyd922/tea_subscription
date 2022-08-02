@@ -1,5 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe CustomerTea, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe 'relationships' do
+    it { should belong_to :customer_subscription }
+    it { should belong_to :tea }
+    it { should have_one(:customer).through(:customer_subscription) }
+  end
 end
