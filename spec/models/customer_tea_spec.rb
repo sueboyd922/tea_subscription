@@ -6,4 +6,7 @@ RSpec.describe CustomerTea, type: :model do
     it { should belong_to :tea }
     it { should have_one(:customer).through(:customer_subscription) }
   end
+
+  
+
 end
