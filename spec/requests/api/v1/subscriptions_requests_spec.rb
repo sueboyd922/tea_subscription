@@ -7,7 +7,15 @@ RSpec.describe 'subscriptions requests', type: :feature do
 
   describe 'creating a subscription' do
     it 'can create a subscription for a customer' do
-      require "pry"; binding.pry
+      subscription_params = {
+        subscription_id: 1,
+        frequency: "weekly"
+      }
+      headers = {"CONTENT_TYPE" => "application/json"}
+
+      post "/customers/#{customer_1.id}/subscriptions", headers: headers, params: JSON.generate(subscription: subscription_params)
+
+      expect(response).to be_successful
     end
   end
 end
