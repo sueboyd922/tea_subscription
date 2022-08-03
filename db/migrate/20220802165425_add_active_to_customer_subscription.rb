@@ -1,5 +1,5 @@
 class AddActiveToCustomerSubscription < ActiveRecord::Migration[6.0]
   def change
-    add_column :customer_subscriptions, :active, :boolean
+    add_column :customer_subscriptions, :active, :boolean, default: true
   end
 end
