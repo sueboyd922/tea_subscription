@@ -75,4 +75,17 @@ RSpec.describe 'subscriptions requests', type: :request do
       expect(subscription_response[:errors]).to eq("This subscription belongs to another customer")
     end
   end
+
+  describe 'getting all of a customers subscriptions' do
+    it 'can get all of a customers subscriptions' do
+      cust_sub_1 = customer_1.customer_subscriptions.create!(subsciption: subscription_1, active: true)
+      cust_sub_1 = customer_1.customer_subscriptions.create!(subsciption: subscription_2, active: false)
+      cust_sub_1 = customer_1.customer_subscriptions.create!(subsciption: subscription_2, active: true)
+      cust_sub_1 = customer_1.customer_subscriptions.create!(subsciption: subscription_3, active: true)
+
+      get "/api/v1/customers/#{customer_1.id}/subscriptions"
+      subscription_response = JSON.parse(response.body, symbolize_names: true)
+    end
+  end
+
 end
