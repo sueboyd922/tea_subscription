@@ -3,4 +3,6 @@ Rails.application.routes.draw do
   post '/api/v1/customers/:customer_id/subscriptions', to: 'api/v1/customer_subscriptions#create'
 
   patch '/api/v1/customers/:customer_id/subscriptions/:id', to: 'api/v1/customer_subscriptions#update'
+
+  get '/api/v1/customers/:customer_id/subscriptions', to: 'api/v1/customer_subscriptions#index'
 end

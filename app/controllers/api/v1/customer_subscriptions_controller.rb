@@ -1,6 +1,13 @@
 class Api::V1::CustomerSubscriptionsController < ApplicationController
   before_action :validate_customer, only: [:update]
 
+  def index
+    customer = Customer.find(params[:customer_id])
+    subscriptions = customer.customer_subscriptions
+    require "pry"; binding.pry
+    render json: CustomerSubscriptionSerializer.subscription_list(subscriptions.to_a), status: 200
+  end
+
   def create
     subscription = CustomerSubscription.new(subscription_params)
     if subscription.save
