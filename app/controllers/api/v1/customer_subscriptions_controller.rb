@@ -10,6 +10,12 @@ class Api::V1::CustomerSubscriptionsController < ApplicationController
     end
   end
 
+  def update
+    cust_sub = CustomerSubscription.find(params[:id])
+    cust_sub.change_status(params[:active])
+    render json: CustomerSubscriptionSerializer.updated(cust_sub), status: 200
+  end
+
   private
   def subscription_params
     params.permit(:subscription_id, :frequency, :customer_id)
