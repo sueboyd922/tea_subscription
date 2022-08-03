@@ -6,4 +6,8 @@ class Customer < ApplicationRecord
 
   validates_presence_of :first_name, :last_name, :street, :zip_code, :state, :city, :email
   validates_uniqueness_of :email
+
+  def full_name
+    "#{self.first_name} #{self.last_name}"
+  end
 end

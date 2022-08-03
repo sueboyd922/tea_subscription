@@ -6,4 +6,11 @@ class CustomerSubscription < ApplicationRecord
 
   validates_presence_of :frequency, :active
   enum frequency: ["weekly", "monthly", "every 3 months", "yearly"]
+
+  def add_teas(teas)
+    teas.each do |tea|
+      tea = Tea.find_by(name: tea)
+      CustomerTea.create!(tea_id: tea.id, customer_subscription_id: self.id)
+    end
+  end
 end
