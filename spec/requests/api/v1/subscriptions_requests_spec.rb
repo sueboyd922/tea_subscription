@@ -45,4 +45,16 @@ RSpec.describe 'subscriptions requests', type: :request do
       expect(subscription_response[:errors]).to eq("Customer must exist")
     end
   end
+
+  describe 'updating a customer subscription' do
+    it 'can make a subsciption inactive' do
+      customer_subscription = customer_1.customer_subscriptions.create(subscription_id: subscription_2.id)
+
+      expect(customer_subscription.active).to be true
+
+      headers = {"CONTENT_TYPE" => "application/json"}
+
+      patch "/api/v1/customers/#{customer_2.id + 1}/subscriptions/#{customer_subscription.id}", headers: headers, params: JSON.generate({action: "deactivate"})
+    end
+  end
 end
