@@ -17,6 +17,8 @@ class CustomerSubscription < ApplicationRecord
   def change_status(status)
     if status == "deactivate"
       self.update(active: false)
+    elsif status == "activate"
+      self.update(active: true)
     end
   end
 end
