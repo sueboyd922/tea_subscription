@@ -18,4 +18,12 @@ RSpec.describe Customer, type: :model do
     it { should validate_presence_of (:email) }
     it { should validate_uniqueness_of (:email) }
   end
+
+  describe 'instance methods' do
+    it '#full_name' do
+      customer = create(:customer, first_name: "Susan", last_name: "Boyd")
+
+      expect(customer.full_name).to eq("Susan Boyd")
+    end
+  end
 end

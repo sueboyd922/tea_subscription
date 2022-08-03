@@ -45,4 +45,34 @@ RSpec.describe 'subscriptions requests', type: :request do
       expect(subscription_response[:errors]).to eq("Customer must exist")
     end
   end
+
+  describe 'updating a customer subscription' do
+    it 'can make a subsciption inactive' do
+      customer_subscription = customer_1.customer_subscriptions.create(subscription_id: subscription_2.id, frequency: "yearly")
+
+      expect(customer_subscription.active).to be true
+
+      headers = {"CONTENT_TYPE" => "application/json"}
+
+      patch "/api/v1/customers/#{customer_1.id}/subscriptions/#{customer_subscription.id}", headers: headers, params: JSON.generate({active: "deactivate"})
+
+      subscription_response = JSON.parse(response.body, symbolize_names: true)
+
+      expect(subscription_response[:data][:subscription][:active]).to be false
+      expect(CustomerSubscription.find(customer_subscription.id).active).to be false
+    end
+
+    it 'throws an error if the customer id does not match the subscriptions customer id' do
+      customer_subscription = customer_1.customer_subscriptions.create(subscription_id: subscription_2.id, frequency: "yearly")
+
+      expect(customer_subscription.active).to be true
+
+      headers = {"CONTENT_TYPE" => "application/json"}
+
+      patch "/api/v1/customers/#{customer_2.id}/subscriptions/#{customer_subscription.id}", headers: headers, params: JSON.generate({active: "deactivate"})
+
+      subscription_response = JSON.parse(response.body, symbolize_names: true)
+      expect(subscription_response[:errors]).to eq("This subscription belongs to another customer")
+    end
+  end
 end
