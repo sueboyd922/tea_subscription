@@ -74,6 +74,5 @@ RSpec.describe 'subscriptions requests', type: :request do
       subscription_response = JSON.parse(response.body, symbolize_names: true)
       expect(subscription_response[:errors]).to eq("This subscription belongs to another customer")
     end
-
   end
 end
