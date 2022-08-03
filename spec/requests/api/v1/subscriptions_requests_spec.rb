@@ -77,12 +77,12 @@ RSpec.describe 'subscriptions requests', type: :request do
   end
 
   describe 'getting all of a customers subscriptions' do
-    it 'can get all of a customers subscriptions' do
-      cust_sub_1 = customer_1.customer_subscriptions.create!(subscription: subscription_1, active: true, frequency: "weekly")
-      cust_sub_1 = customer_1.customer_subscriptions.create!(subscription: subscription_2, active: false, frequency: "weekly")
-      cust_sub_1 = customer_1.customer_subscriptions.create!(subscription: subscription_2, active: true, frequency: "weekly")
-      cust_sub_1 = customer_1.customer_subscriptions.create!(subscription: subscription_3, active: true, frequency: "weekly")
+    let!(:cust_sub_1) {customer_1.customer_subscriptions.create!(subscription: subscription_1, active: true, frequency: "weekly")}
+    let!(:cust_sub_2) {customer_1.customer_subscriptions.create!(subscription: subscription_2, active: false, frequency: "weekly")}
+    let!(:cust_sub_3) {customer_1.customer_subscriptions.create!(subscription: subscription_2, active: true, frequency: "weekly")}
+    let!(:cust_sub_4) {customer_1.customer_subscriptions.create!(subscription: subscription_3, active: true, frequency: "weekly")}
 
+    it 'can get all of a customers subscriptions' do
       get "/api/v1/customers/#{customer_1.id}/subscriptions"
       subscription_response = JSON.parse(response.body, symbolize_names: true)
 
@@ -90,15 +90,17 @@ RSpec.describe 'subscriptions requests', type: :request do
     end
 
     it 'can return all active subscriptions' do
-      cust_sub_1 = customer_1.customer_subscriptions.create!(subscription: subscription_1, active: true, frequency: "weekly")
-      cust_sub_1 = customer_1.customer_subscriptions.create!(subscription: subscription_2, active: false, frequency: "weekly")
-      cust_sub_1 = customer_1.customer_subscriptions.create!(subscription: subscription_2, active: true, frequency: "weekly")
-      cust_sub_1 = customer_1.customer_subscriptions.create!(subscription: subscription_3, active: true, frequency: "weekly")
-
       get "/api/v1/customers/#{customer_1.id}/subscriptions?status=active"
       subscription_response = JSON.parse(response.body, symbolize_names: true)
 
-      expect(subscription_response[:data][:subscriptions].count).to eq(4)
+      expect(subscription_response[:data][:subscriptions].count).to eq(3)
+    end
+
+    it 'can return all inactive subscriptions' do
+      get "/api/v1/customers/#{customer_1.id}/subscriptions?status=inactive"
+      subscription_response = JSON.parse(response.body, symbolize_names: true)
+
+      expect(subscription_response[:data][:subscriptions].count).to eq(1)
     end
   end
 end

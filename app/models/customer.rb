@@ -10,4 +10,12 @@ class Customer < ApplicationRecord
   def full_name
     "#{self.first_name} #{self.last_name}"
   end
+
+  def active_subscriptions
+    customer_subscriptions.where(active: true)
+  end
+
+  def inactive_subscriptions
+    customer_subscriptions.where(active: false)
+  end
 end

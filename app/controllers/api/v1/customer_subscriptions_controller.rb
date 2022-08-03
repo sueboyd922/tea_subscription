@@ -2,9 +2,8 @@ class Api::V1::CustomerSubscriptionsController < ApplicationController
   before_action :validate_customer, only: [:update]
 
   def index
-    customer = Customer.find(params[:customer_id])
-    subscriptions = customer.customer_subscriptions
-    require "pry"; binding.pry
+    @customer = Customer.find(params[:customer_id])
+    subscriptions = choose_subscriptions
     render json: CustomerSubscriptionSerializer.subscription_list(subscriptions.to_a), status: 200
   end
 
@@ -33,6 +32,16 @@ class Api::V1::CustomerSubscriptionsController < ApplicationController
     @customer_sub = CustomerSubscription.find(params[:id])
     if @customer_sub.customer_id != params[:customer_id].to_i
       render json: {errors: "This subscription belongs to another customer" }, status: 400
+    end
+  end
+
+  def choose_subscriptions
+    if params[:status] == "active"
+      @customer.active_subscriptions
+    elsif params[:status] == "inactive"
+      @customer.inactive_subscriptions
+    else
+      @customer.customer_subscriptions
     end
   end
 end
