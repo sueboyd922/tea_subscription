@@ -42,7 +42,7 @@ RSpec.describe 'subscriptions requests', type: :request do
 
       subscription_response = JSON.parse(response.body, symbolize_names: true)
       expect(response.status).to eq(404)
-      expect(subscription_response[:errors]).to eq("Customer must exist")
+      expect(subscription_response[:errors]).to eq("Couldn't find Customer with 'id'=#{customer_2.id + 1}")
     end
   end
 

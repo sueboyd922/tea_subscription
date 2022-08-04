@@ -1,8 +1,9 @@
 class Api::V1::CustomerSubscriptionsController < ApplicationController
+  before_action :existing_customer, only: [:index, :create, :update]
   before_action :validate_customer, only: [:update]
 
   def index
-    @customer = Customer.find(params[:customer_id])
+    # @customer = Customer.find(params[:customer_id])
     subscriptions = choose_subscriptions
     render json: CustomerSubscriptionSerializer.subscription_list(subscriptions.to_a), status: 200
   end
@@ -31,7 +32,7 @@ class Api::V1::CustomerSubscriptionsController < ApplicationController
 
   def validate_customer
     @customer_sub = CustomerSubscription.find(params[:id])
-    if @customer_sub.customer_id != params[:customer_id].to_i
+    if @customer_sub.customer_id != @customer.id
       render json: {errors: "This subscription belongs to another customer" }, status: 400
     end
   end
