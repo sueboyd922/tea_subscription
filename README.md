@@ -15,10 +15,11 @@ To use this API on your local computer follow these instructions in your termina
 1. Clone this repository
 2. `cd` into repository
 3. Run `bundle install` 
-4. Run `rails db:{create,migrate,seed}`
+4. Run `rails db:{create,migrate}`
 5. Run `rake load_teas`
-6. Run `rails s`
-7. Open Postman
+6. Run `rails db:seed`
+7. Run `rails s`
+8. Open Postman
 
 
 ## Gems Used
