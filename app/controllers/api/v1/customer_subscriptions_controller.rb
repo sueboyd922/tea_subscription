@@ -13,7 +13,7 @@ class Api::V1::CustomerSubscriptionsController < ApplicationController
       subscription.add_teas(params[:tea])
       render json: CustomerSubscriptionSerializer.new_subscription(subscription), status: 201
     else
-      render json: {errors: subscription.errors.full_messages.to_sentence }, status: 404
+      render_error(subscription.errors.full_messages.to_sentence, 400)
     end
   end
 
@@ -31,7 +31,7 @@ class Api::V1::CustomerSubscriptionsController < ApplicationController
 
   def validate_customer
     if @customer_subscription.customer_id != @customer.id
-      render json: {errors: "This subscription belongs to another customer" }, status: 400
+      render_error("This subscription belongs to another customer", 400)
     end
   end
 
