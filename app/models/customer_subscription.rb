@@ -20,5 +20,6 @@ class CustomerSubscription < ApplicationRecord
     elsif status == "activate"
       self.update(active: true)
     end
+    #toggle
   end
 end
