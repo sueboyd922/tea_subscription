@@ -14,11 +14,7 @@ class CustomerSubscription < ApplicationRecord
     end
   end
 
-  def change_status(status)
-    if status == "deactivate"
-      self.update(active: false)
-    elsif status == "activate"
-      self.update(active: true)
-    end
+  def change_active_status
+    toggle!(:active)
   end
 end
