@@ -20,10 +20,30 @@ RSpec.describe Customer, type: :model do
   end
 
   describe 'instance methods' do
-    it '#full_name' do
-      customer = create(:customer, first_name: "Susan", last_name: "Boyd")
+    let!(:customer) { create(:customer, first_name: "Susan", last_name: "Boyd") }
+    let!(:customer_2) { create(:customer) }
+    let!(:subscription) { Subscription.create!(name: "Single Tea", price: 10, tea_limit: 1)}
 
+    it '#full_name' do
       expect(customer.full_name).to eq("Susan Boyd")
+    end
+
+    it '#active_subscriptions' do
+      sub_1 = customer.customer_subscriptions.create!(subscription: subscription, frequency: "weekly")
+      sub_2 = customer.customer_subscriptions.create!(subscription: subscription, frequency: "weekly", active: false)
+      sub_3 = customer.customer_subscriptions.create!(subscription: subscription, frequency: "weekly")
+      sub_4 = customer_2.customer_subscriptions.create!(subscription: subscription, frequency: "weekly")
+
+      expect(customer.active_subscriptions).to eq([sub_1, sub_3])
+    end
+
+    it '#inactive_subscriptions' do
+      sub_1 = customer.customer_subscriptions.create!(subscription: subscription, frequency: "weekly")
+      sub_2 = customer.customer_subscriptions.create!(subscription: subscription, frequency: "weekly", active: false)
+      sub_3 = customer.customer_subscriptions.create!(subscription: subscription, frequency: "weekly")
+      sub_4 = customer_2.customer_subscriptions.create!(subscription: subscription, frequency: "weekly", active: false)
+
+      expect(customer.inactive_subscriptions).to eq([sub_2])
     end
   end
 end
