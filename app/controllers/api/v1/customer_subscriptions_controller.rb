@@ -4,7 +4,6 @@ class Api::V1::CustomerSubscriptionsController < ApplicationController
   def index
     @customer = Customer.find(params[:customer_id])
     subscriptions = choose_subscriptions
-    require "pry"; binding.pry
     render json: CustomerSubscriptionSerializer.subscription_list(subscriptions.to_a), status: 200
   end
 
@@ -19,7 +18,9 @@ class Api::V1::CustomerSubscriptionsController < ApplicationController
   end
 
   def update
-    @customer_sub.change_status(params[:active])
+    if params[:update] == "active status"
+      @customer_sub.change_active_status
+    end
     render json: CustomerSubscriptionSerializer.updated(@customer_sub), status: 200
   end
 

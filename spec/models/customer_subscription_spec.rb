@@ -29,14 +29,14 @@ RSpec.describe CustomerSubscription, type: :model do
       expect(CustomerTea.all.count).to eq(2)
     end
 
-    it '#change_status' do
+    it '#change_active_status' do
       expect(customer_sub.active).to eq(true)
-      customer_sub.change_status("deactivate")
+      customer_sub.change_active_status
       expect(customer_sub.active).to eq(false)
 
       expect(CustomerSubscription.find(customer_sub.id).active).to eq(false)
 
-      customer_sub.change_status("activate")
+      customer_sub.change_active_status
       expect(customer_sub.active).to eq(true)
       expect(CustomerSubscription.find(customer_sub.id).active).to eq(true)
     end

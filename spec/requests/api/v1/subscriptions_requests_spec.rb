@@ -54,7 +54,7 @@ RSpec.describe 'subscriptions requests', type: :request do
 
       headers = {"CONTENT_TYPE" => "application/json"}
 
-      patch "/api/v1/customers/#{customer_1.id}/subscriptions/#{customer_subscription.id}", headers: headers, params: JSON.generate({active: "deactivate"})
+      patch "/api/v1/customers/#{customer_1.id}/subscriptions/#{customer_subscription.id}", headers: headers, params: JSON.generate({update: "active status"})
 
       subscription_response = JSON.parse(response.body, symbolize_names: true)
 
@@ -69,7 +69,7 @@ RSpec.describe 'subscriptions requests', type: :request do
 
       headers = {"CONTENT_TYPE" => "application/json"}
 
-      patch "/api/v1/customers/#{customer_2.id}/subscriptions/#{customer_subscription.id}", headers: headers, params: JSON.generate({active: "deactivate"})
+      patch "/api/v1/customers/#{customer_2.id}/subscriptions/#{customer_subscription.id}", headers: headers, params: JSON.generate({update: "active status"})
 
       subscription_response = JSON.parse(response.body, symbolize_names: true)
       expect(subscription_response[:errors]).to eq("This subscription belongs to another customer")
