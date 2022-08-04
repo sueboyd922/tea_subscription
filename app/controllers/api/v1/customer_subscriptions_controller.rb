@@ -1,11 +1,10 @@
 class Api::V1::CustomerSubscriptionsController < ApplicationController
   before_action :existing_customer, only: [:index, :create, :update]
+  before_action :existing_customer_subscription, only: [:update]
   before_action :validate_customer, only: [:update]
 
   def index
-    # @customer = Customer.find(params[:customer_id])
-    subscriptions = choose_subscriptions
-    render json: CustomerSubscriptionSerializer.subscription_list(subscriptions.to_a), status: 200
+    render json: CustomerSubscriptionSerializer.subscription_list(choose_subscriptions.to_a), status: 200
   end
 
   def create
@@ -20,9 +19,9 @@ class Api::V1::CustomerSubscriptionsController < ApplicationController
 
   def update
     if params[:update] == "active status"
-      @customer_sub.change_active_status
+      @customer_subscription.change_active_status
     end
-    render json: CustomerSubscriptionSerializer.updated(@customer_sub), status: 200
+    render json: CustomerSubscriptionSerializer.updated(@customer_subscription), status: 200
   end
 
   private
@@ -31,8 +30,7 @@ class Api::V1::CustomerSubscriptionsController < ApplicationController
   end
 
   def validate_customer
-    @customer_sub = CustomerSubscription.find(params[:id])
-    if @customer_sub.customer_id != @customer.id
+    if @customer_subscription.customer_id != @customer.id
       render json: {errors: "This subscription belongs to another customer" }, status: 400
     end
   end
