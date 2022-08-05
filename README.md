@@ -19,19 +19,23 @@ To use this API on your local computer follow these instructions in your termina
 5. Run `rake load_teas`
 6. Run `rails db:seed`
 7. Run `rails s`
-8. Open Postman
+8. [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/c0c82824346657c05d6a?action=collection%2Fimport)
 
-
-## Gems Used
-* Faker
-* Factory Bot
-* Faraday
-* Shoulda-Matchers
-* RSpec-Rails
 
 ## Endpoints
 
-1. Create a new subscription 
+### Available Data 
+  - Customer Ids: 1, 2
+  - Customber Subscription Ids: 
+    1. `Customer 1 => [1, 2, 3, 8, 9, 10]`
+    2. `Customer 2 => [4, 5, 6, 7]`
+  - Subscription ids: 
+    1. `Single Tea => id: 1, tea_limit: 1` 
+    2. `Tea Lover => id: 2, tea_limit: 3` 
+    3. `Tea Fiend => id: 3, tea_limit: 5`
+  - Fequency options: `["weekly", "monthly", "every 3 months", "yearly"]`
+
+### **Create a new subscription** 
   * `post http://localhost:3000/api/v1/customers/{customer_id}/subscriptions`
   * With headers `Content-Type = application/value`
   * Body 
@@ -71,5 +75,89 @@ To use this API on your local computer follow these instructions in your termina
               }
              }
             }
-        ```
+  * If you try to create a customer subscription with more teas allowed on the subscription
+  * Body 
+    ```ruby
+    {
+    "subscription_id": "2",
+    "frequency": "weekly",
+    "tea": ["green", "black", "jasmine", "white"]
+    }
+    ```
+    
+  * Expected Response
+    ```ruby 
+     {
+    "errors": "Tea limit This subscription has a limit of 3 teas."
+     }
+     ```
+### **Updating a new subscription**
+  * `patch http://localhost:3000/api/v1/customers/{customer_id}/subscriptions/{customer_subscription_id}`
+  * With headers `Content-Type = application/value`
+  * Body
+    ```ruby
+    {
+    "update": "active status"
+    }
+    ```
+  * Expected Response 
+    ```ruby
+    {
+    "data": {
+        "id": 5,
+        "name": "Jon Snow",
+        "subscription": {
+            "name": "Single Tea",
+            "active": false
+        }
+      }
+    }
+    ```
+   * **Note** This endpoint changes active status from true to false and also from false to true
+  
+### **Getting all the subscriptions of a customer**
+   * `get http://localhost:3000/api/v1/customers/{customer_id}/subscriptions`
+   * Expected Response
+     ```ruby
+     {
+      "data": {
+        "customer": {
+            "id": 1,
+            "name": "Harry Potter"
+        },
+        "subscriptions": [
+            {
+                "name": "Single Tea",
+                "frequency": "monthly",
+                "price": 10,
+                "active": false
+            },
+            {
+                "name": "Tea Lover",
+                "frequency": "yearly",
+                "price": 20,
+                "active": false
+            },
+             ..., 
+            {
+                "name": "Tea Fiend",
+                "frequency": "weekly",
+                "price": 30,
+                "active": true
+            }
+           ]
+         }
+       }
+       ``` 
+   * If you want only the `active` or `inactive` subscriptions this end point accepts query params and the response format will be the same
+     - `get http://localhost:3000/api/v1/customers/{customer_id}/subscriptions?status=active`
+     - `get http://localhost:3000/api/v1/customers/{customer_id}/subscriptions?status=inactive`
+     
 
+## Gems Used
+* Faker
+* Factory Bot
+* Faraday
+* Shoulda-Matchers
+* RSpec-Rails
+      
