@@ -7,6 +7,15 @@ class CustomerSubscription < ApplicationRecord
   validates_presence_of :frequency
   enum frequency: ["weekly", "monthly", "every 3 months", "yearly"]
 
+  def meets_limit(tea)
+    if tea.count > subscription.tea_limit
+      errors.add(:tea_limit, "This subscription has a limit of #{subscription.tea_limit} teas.")
+      return false
+    else
+      return true
+    end
+  end
+
   def add_teas(teas)
     teas.each do |tea|
       tea = Tea.find_by(name: tea)

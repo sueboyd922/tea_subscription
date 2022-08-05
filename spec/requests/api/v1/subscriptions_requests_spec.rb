@@ -21,6 +21,7 @@ RSpec.describe 'subscriptions requests', type: :request do
       post "/api/v1/customers/#{customer_1.id}/subscriptions", headers: headers, params: JSON.generate(subscription_params)
 
       subscription_response = JSON.parse(response.body, symbolize_names: true)
+
       expect(response.status).to be(201)
       expect(subscription_response[:data]).to be_a Hash
       expect(subscription_response[:data]).to have_key(:name)
@@ -58,6 +59,23 @@ RSpec.describe 'subscriptions requests', type: :request do
       subscription_response = JSON.parse(response.body, symbolize_names: true)
       expect(response.status).to eq(400)
       expect(subscription_response[:errors]).to eq("Frequency can't be blank")
+    end
+
+    it 'can not add more teas to the customer subsciption than the subscription allows' do
+      tea = teas[0]
+      tea_2 = teas[4]
+      subscription_params = {
+        subscription_id: subscription_1.id,
+        frequency: "weekly",
+        tea: [tea.name, tea_2.name]
+      }
+      headers = {"CONTENT_TYPE" => "application/json"}
+
+      post "/api/v1/customers/#{customer_2.id}/subscriptions", headers: headers, params: JSON.generate(subscription_params)
+
+      subscription_response = JSON.parse(response.body, symbolize_names: true)
+
+      expect(subscription_response[:errors]).to eq("Tea limit This subscription has a limit of 1 teas.")
     end
   end
 

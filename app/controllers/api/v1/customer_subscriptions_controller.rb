@@ -9,7 +9,7 @@ class Api::V1::CustomerSubscriptionsController < ApplicationController
 
   def create
     subscription = CustomerSubscription.new(subscription_params)
-    if subscription.save
+    if subscription.meets_limit(params[:tea]) && subscription.save
       subscription.add_teas(params[:tea])
       render json: CustomerSubscriptionSerializer.new_subscription(subscription), status: 201
     else
