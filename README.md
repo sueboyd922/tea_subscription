@@ -1,6 +1,6 @@
 # Tea Subscription
 
-This project is an API for a company that has tea subscriptions for customers. The company offers 3 different subscriptions: **Single Tea**, **Tea Lover** and **Tea Fiend**. The company has 12 different teas available (taken from the [Tea API](https://tea-api-vic-lo.herokuapp.com/). For this project I opted to use a rake task to hit the API and just store the tea data directly into the database. A customer can create a subscription with a certain number of teas on it, they can deactivate a subscription or activate it. The API also allows you to get all subscriptions for a particular customer and can opt to filter it by active and inactive subscriptions. 
+This project is an API build on Ruby on Rails with a Postgres database for a company that has tea subscriptions for customers. The company offers 3 different subscriptions: **Single Tea**, **Tea Lover** and **Tea Fiend**. The company has 12 different teas available (taken from the [Tea API](https://tea-api-vic-lo.herokuapp.com/). For this project I opted to use a rake task to hit the API and just store the tea data directly into the database. A customer can create a subscription with a certain number of teas on it by chosen by name, they can deactivate a subscription or activate it. It will not allow a customer to add more teas than their chosen subscription allows and it will not allow a customer to update a customer_subscription that does not belong to them. The API also allows you to get all subscriptions for a particular customer and can opt to filter it by active and inactive subscriptions. 
 
 ## Schema
 
@@ -24,10 +24,10 @@ To use this API on your local computer follow these instructions in your termina
 
 ## Endpoints
 
-### Available Data 
+### Available Data after Seeding
   - Customer Ids: 1, 2
   - Customber Subscription Ids: 
-    1. `Customer 1 => [1, 2, 3, 8, 9, 10]`
+    1. `Customer 1 => [1, 2, 3]`
     2. `Customer 2 => [4, 5, 6, 7]`
   - Subscription ids: 
     1. `Single Tea => id: 1, tea_limit: 1` 
